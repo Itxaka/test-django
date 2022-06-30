@@ -1,0 +1,9 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+<form action="/docker/" method="post">
+    {% csrf_token %}
+    {{ dockerForm }}
+    <input type="submit" value="Submit">
+</form>
+{% endblock %}

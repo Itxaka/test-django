@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Django Docker{% if title %} - {{ title }}{% endif %}{% endblock %}</title>
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'main/style.css' %}">
 </head>
 <body>
 {% block content %}{%  endblock %}

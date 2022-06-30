@@ -4,8 +4,15 @@ from django.forms import Select
 from main.models import DockerAddresses
 
 
+def get_choices():
+    return [(d.id, f'{d.name}({d.uri})') for d in DockerAddresses.objects.all()]
+
+
 class SelectDocker(forms.ModelForm):
-    name = forms.ChoiceField(choices=[(d.id, f'{d.name}({d.uri})') for d in DockerAddresses.objects.all()])
+    """
+    Form to select a docker existing value
+    """
+    name = forms.ChoiceField(choices=get_choices)
 
     class Meta:
         model = DockerAddresses
@@ -13,3 +20,12 @@ class SelectDocker(forms.ModelForm):
         widgets = {
             'name': Select(attrs={'class': 'select'}),
         }
+
+
+class DockerAdd(forms.ModelForm):
+    """
+    Form to add a docker address
+    """
+    class Meta:
+        model = DockerAddresses
+        exclude = []

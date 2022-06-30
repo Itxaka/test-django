@@ -1,7 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, reverse
 from django.views import generic
 from main.models import DockerAddresses, Containers
-from main.forms import SelectDocker
+from main.forms import SelectDocker, DockerAdd
 
 
 class MyView(generic.ListView):
@@ -12,6 +12,7 @@ class MyView(generic.ListView):
         context = super().get_context_data(**kwargs)
         context['title'] = self.title
         context['dockerForm'] = SelectDocker
+        context['dockerFormAdd'] = DockerAdd
         print(context)
         print(kwargs)
         return context
@@ -23,8 +24,6 @@ class IndexView(MyView):
     title = "Addresses"
 
     def get_queryset(self):
-        """Return the last five published questions."""
-        print("get queryset")
         return DockerAddresses.objects.get_queryset()
 
 
@@ -39,3 +38,14 @@ class MainDockerView(MyView):
         docker_id = self.request.POST["name"]
         self.request.session.setdefault("docker_id", docker_id)
         return self.get(self.request, args, kwargs)
+
+
+class DockerAddView(generic.View):
+    def get(self, request, *args, **kwargs):
+        return redirect(reverse("index"))
+
+    def post(self, request, *args, **kwargs):
+        d = DockerAddresses(name=request.POST.get("name"), uri=request.POST.get("uri"))
+        d.save()
+        return redirect(reverse("index"))
+
